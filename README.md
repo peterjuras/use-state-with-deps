@@ -13,11 +13,14 @@ A React hook to use state and reset with dependencies.
 Example:
 
 ```js
-import React from 'react';
+import React from "react";
 import { useStateWithDeps } from "use-state-with-deps";
 
 function AnimatedComponent({ animationType }) {
-  const [animation, setAnimation] = useStateWithDeps(getAnimation(animationType), [animationType]);
+  const [animation, setAnimation] = useStateWithDeps(
+    getAnimation(animationType),
+    [animationType]
+  );
 
   return <div>Current animation: {animation}</div>;
 }
@@ -25,18 +28,19 @@ function AnimatedComponent({ animationType }) {
 
 #### Parameters:
 
-* `initialState`:
-The state that will be set when the component mounts or the dependencies change.
+- `initialState`:
+  The state that will be set when the component mounts or the dependencies change.
 
   It can also be a function which resolves to the state. If the state is reset due to a change of dependencies, this function will be called with the previous state (`undefined` for the first call upon mount).
-* `deps`: Dependencies for this hook that resets the state to `initialState`
+
+- `deps`: Dependencies for this hook that resets the state to `initialState`
 
 ## Motivation
 
 There are some scenarios, where the state of a component is derived from its props and needs to be reset upon an update of the incoming props. For class based components, this could be achieved with the `getDerivedStateFromProps` lifecycle method. With hooks however, this currently can't be achieved out of the box since the state can't be reset easily without triggering another re-render. Let's look at the [example of the documentation](https://reactjs.org/docs/hooks-faq.html#how-do-i-implement-getderivedstatefromprops) of how to migrate `getDerivedStateFromProps` to hooks:
 
 ```js
-function ScrollView({row}) {
+function ScrollView({ row }) {
   const [isScrollingDown, setIsScrollingDown] = useState(false);
   const [prevRow, setPrevRow] = useState(null);
 
@@ -50,7 +54,7 @@ function ScrollView({row}) {
 }
 ```
 
-Here, `isScrollingDown` is returned which was based on `prevRow`, although the correct value would be `prevRow !== null && row > prevRow`. While react will re-render before continuing, the current render method *will continue*, because the execution is synchronous. This is especially problematic when using hooks and expecting the result to be consistent with its input.
+Here, `isScrollingDown` is returned which was based on `prevRow`, although the correct value would be `prevRow !== null && row > prevRow`. While react will re-render before continuing, the current render method _will continue_, because the execution is synchronous. This is especially problematic when using hooks and expecting the result to be consistent with its input.
 
 Let's look at a component where transferring the example from the documentation 1 to 1 would lead to issues:
 
@@ -79,7 +83,7 @@ function useAnimation(type) {
     // TODO: Animate
   }, [animation]);
 
- return animation; // Warning! This returns an object with properties that don't match the type!
+  return animation; // Warning! This returns an object with properties that don't match the type!
 }
 
 function MyComponent({ type }) {
@@ -128,7 +132,7 @@ function useAnimation(type) {
     // TODO: Animate
   }, [animation]);
 
- return animation;
+  return animation;
 }
 ```
 
@@ -140,17 +144,20 @@ With `useStateWithDeps`, the previous hook can then be rewritten as:
 import { useStateWithDeps } from "use-state-with-deps";
 
 function useAnimation(type) {
-  const [animation, setAnimation] = useStateWithDeps(getAnimationFromType(type), [type]);
+  const [animation, setAnimation] = useStateWithDeps(
+    getAnimationFromType(type),
+    [type]
+  );
 
   useEffect(() => {
     // TODO: Animate
   }, [animation]);
 
- return animation;
+  return animation;
 }
 ```
 
 ## Requirements
 
-* React 16.8 or higher
-* A JavaScript environment or polyfill that supports [Object.is](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is)
+- React 16.8 or higher
+- A JavaScript environment or polyfill that supports [Object.is](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is)
