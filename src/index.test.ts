@@ -89,12 +89,12 @@ describe("#use-state-with-deps", () => {
       },
       {
         initialProps: {
-          value: lastState => {
+          value: (lastState) => {
             lastStateValue = lastState;
             return 1;
           },
-          deps: [5]
-        }
+          deps: [5],
+        },
       }
     );
     let [state] = result.current;
@@ -117,22 +117,22 @@ describe("#use-state-with-deps", () => {
       },
       {
         initialProps: {
-          value: lastState => {
+          value: (lastState) => {
             lastStateValue.push(lastState);
             return 1;
           },
-          deps: [5]
-        }
+          deps: [5],
+        },
       }
     );
     let [state] = result.current;
     expect(state).toBe(1);
     rerender({
-      value: lastState => {
+      value: (lastState) => {
         lastStateValue.push(lastState);
         return 2;
       },
-      deps: [9]
+      deps: [9],
     });
     [state] = result.current;
     expect(state).toBe(2);
@@ -151,15 +151,15 @@ describe("#use-state-with-deps", () => {
       {
         initialProps: {
           value: () => 1,
-          deps: [5]
-        }
+          deps: [5],
+        },
       }
     );
     let [state, setState] = result.current;
     let previousValueFromSetState;
     expect(state).toBe(1);
     act(() => {
-      setState(previousValue => {
+      setState((previousValue) => {
         previousValueFromSetState = previousValue;
         return 2;
       });
