@@ -89,12 +89,12 @@ describe("#use-state-with-deps", () => {
       },
       {
         initialProps: {
-          value: (lastState) => {
+          value: lastState => {
             lastStateValue = lastState;
             return 1;
           },
-          deps: [5],
-        },
+          deps: [5]
+        }
       }
     );
     let [state] = result.current;
@@ -117,26 +117,26 @@ describe("#use-state-with-deps", () => {
       },
       {
         initialProps: {
-          value: (lastState) => {
+          value: lastState => {
             lastStateValue.push(lastState);
             return 1;
           },
-          deps: [5],
-        },
+          deps: [5]
+        }
       }
     );
     let [state] = result.current;
     expect(state).toBe(1);
     rerender({
-      value: (lastState) => {
+      value: lastState => {
         lastStateValue.push(lastState);
         return 2;
       },
-      deps: [9],
+      deps: [9]
     });
     [state] = result.current;
     expect(state).toBe(2);
-    expect(lastStateValue).toEqual([undefined, undefined, 1]);
+    expect(lastStateValue).toEqual([undefined, 1]);
   });
 
   test("should work with using a setState updater function", () => {
@@ -151,15 +151,15 @@ describe("#use-state-with-deps", () => {
       {
         initialProps: {
           value: () => 1,
-          deps: [5],
-        },
+          deps: [5]
+        }
       }
     );
     let [state, setState] = result.current;
     let previousValueFromSetState;
     expect(state).toBe(1);
     act(() => {
-      setState((previousValue) => {
+      setState(previousValue => {
         previousValueFromSetState = previousValue;
         return 2;
       });
@@ -167,5 +167,72 @@ describe("#use-state-with-deps", () => {
     [state, setState] = result.current;
     expect(state).toBe(2);
     expect(previousValueFromSetState).toBe(1);
+  });
+
+  test("should not call initialState function when already mounted and dependencies do not change", () => {
+    let initialStateCalled = 0;
+    function getInitialState(): number {
+      initialStateCalled++;
+      return 1;
+    }
+    const { result, rerender } = renderHook<
+      { value: number | ((lastState?: number) => number); deps: any[] },
+      [number, React.Dispatch<React.SetStateAction<number>>]
+    >(
+      ({ value, deps }) => {
+        const state = useStateWithDeps(value, deps);
+        return state;
+      },
+      {
+        initialProps: {
+          value: getInitialState,
+          deps: [5]
+        }
+      }
+    );
+    let [state] = result.current;
+    expect(state).toBe(1);
+    rerender({ value: getInitialState, deps: [5] });
+    rerender({ value: getInitialState, deps: [5] });
+    rerender({ value: getInitialState, deps: [5] });
+    rerender({ value: getInitialState, deps: [5] });
+    rerender({ value: getInitialState, deps: [5] });
+    [state] = result.current;
+    expect(state).toBe(1);
+    expect(initialStateCalled).toBe(1);
+  });
+
+  test("should not re-render if setState is called but state does not change", () => {
+    let renderCount = 0;
+    const { result } = renderHook<
+      { value: number | ((lastState?: number) => number); deps: any[] },
+      [number, React.Dispatch<React.SetStateAction<number>>]
+    >(
+      ({ value, deps }) => {
+        renderCount++;
+        const state = useStateWithDeps(value, deps);
+        return state;
+      },
+      {
+        initialProps: {
+          value: () => 1,
+          deps: [5]
+        }
+      }
+    );
+    let [state, setState] = result.current;
+    expect(state).toBe(1);
+    act(() => {
+      setState(1);
+    });
+    act(() => {
+      setState(1);
+    });
+    act(() => {
+      setState(1);
+    });
+    [state, setState] = result.current;
+    expect(state).toBe(1);
+    expect(renderCount).toBe(1);
   });
 });
