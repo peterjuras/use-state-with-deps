@@ -1,0 +1,5 @@
+{
+  "extends": ["config:base", "group:allNonMajor"],
+  "schedule": "before 3am on Friday",
+  "postUpdateOptions": ["yarnDedupeHighest"]
+}

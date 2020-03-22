@@ -1,0 +1,58 @@
+{
+  "name": "use-state-with-deps",
+  "version": "0.0.0-development",
+  "description": "A React hook to use and reset state with dependencies",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/peterjuras/use-state-with-deps.git"
+  },
+  "author": "Peter Juras <me@peterjuras.com>",
+  "scripts": {
+    "build:typedefs": "tsc -p tsconfig.build.json --declaration --emitDeclarationOnly",
+    "build:ts": "babel src -d build --extensions '.ts,.tsx' --ignore '**/*.test.ts,**/*.test.tsx'",
+    "build": "rm -rf build && run-p build:ts build:typedefs && cp -R scripts .npmignore LICENSE package.json README.md build",
+    "prepublishOnly": "node ./scripts/ensure-publish-path",
+    "lint:eslint": "eslint '{scripts,src,test}/**/*.{ts,tsx,js}' --max-warnings 0",
+    "lint:tsc": "tsc",
+    "lint:prettier": "prettier-check '{scripts,src,test}/**/*.{ts,tsx,js}'",
+    "lint": "run-p lint:eslint lint:tsc lint:prettier",
+    "test": "jest --config .jest.js",
+    "test-ci": "jest --ci --config .jest.ci.js"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "7.8.4",
+    "@babel/core": "7.8.7",
+    "@babel/plugin-proposal-class-properties": "7.8.3",
+    "@babel/preset-env": "7.8.7",
+    "@babel/preset-react": "7.8.3",
+    "@babel/preset-typescript": "7.8.3",
+    "@testing-library/react": "10.0.1",
+    "@testing-library/react-hooks": "3.2.1",
+    "@types/jest": "25.1.4",
+    "@types/lolex": "5.1.0",
+    "@types/react": "16.9.23",
+    "@typescript-eslint/eslint-plugin": "2.24.0",
+    "@typescript-eslint/parser": "2.24.0",
+    "babel-jest": "25.1.0",
+    "coveralls": "3.0.11",
+    "eslint": "6.8.0",
+    "eslint-config-prettier": "6.10.0",
+    "eslint-plugin-react": "7.19.0",
+    "jest": "25.1.0",
+    "jest-junit": "10.0.0",
+    "npm-run-all": "4.1.5",
+    "prettier": "1.19.1",
+    "prettier-check": "2.0.0",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "react-test-renderer": "16.13.1",
+    "typescript": "3.8.3"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0"
+  },
+  "dependencies": {}
+}
