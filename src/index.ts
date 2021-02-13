@@ -1,4 +1,4 @@
-import { useRef, SetStateAction } from "react";
+import { useRef, SetStateAction, useCallback } from "react";
 import { useForceUpdate } from "./use-force-update";
 import { depsAreEqual } from "./deps-are-equal";
 import { isFunction } from "./is-function";
@@ -57,7 +57,10 @@ export function useStateWithDeps<S>(
   }
 
   const forceUpdate = useForceUpdate();
-  function updateState(newState: S | ((previousState: S) => S)): void {
+
+  const updateState = useCallback(function updateState(
+    newState: S | ((previousState: S) => S)
+  ): void {
     let nextState: S;
     if (isFunction(newState)) {
       nextState = newState(state.current);
@@ -68,7 +71,8 @@ export function useStateWithDeps<S>(
       state.current = nextState;
       forceUpdate();
     }
-  }
+  },
+  []);
 
   return [state.current, updateState];
 }

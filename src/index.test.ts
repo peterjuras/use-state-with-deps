@@ -220,6 +220,7 @@ describe("#use-state-with-deps", () => {
         },
       }
     );
+
     let [state, setState] = result.current;
     expect(state).toBe(1);
     act(() => {
@@ -234,5 +235,43 @@ describe("#use-state-with-deps", () => {
     [state, setState] = result.current;
     expect(state).toBe(1);
     expect(renderCount).toBe(1);
+  });
+
+  test("should not change the setState function across multiple invocations", () => {
+    let renderCount = 0;
+    const { result } = renderHook<
+      { value: number | ((lastState?: number) => number); deps: any[] },
+      [number, React.Dispatch<React.SetStateAction<number>>]
+    >(
+      ({ value, deps }) => {
+        renderCount++;
+
+        const state = useStateWithDeps(value, deps);
+        return state;
+      },
+      {
+        initialProps: {
+          value: () => 1,
+          deps: [5],
+        },
+      }
+    );
+
+    let [state, setState] = result.current;
+    expect(state).toBe(1);
+    act(() => {
+      setState(2);
+    });
+    act(() => {
+      setState(3);
+    });
+    act(() => {
+      setState(4);
+    });
+    const oldSetState = setState;
+    [state, setState] = result.current;
+    expect(oldSetState).toBe(setState);
+    expect(state).toBe(4);
+    expect(renderCount).toBe(4);
   });
 });
