@@ -31,7 +31,7 @@
     "@babel/preset-typescript": "7.17.12",
     "@testing-library/react": "13.3.0",
     "@testing-library/react-hooks": "8.0.0",
-    "@types/jest": "28.1.1",
+    "@types/jest": "28.1.2",
     "@types/lolex": "5.1.2",
     "@types/react": "18.0.14",
     "@typescript-eslint/eslint-plugin": "5.28.0",
