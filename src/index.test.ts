@@ -77,6 +77,24 @@ describe("#use-state-with-deps", () => {
     expect(state).toBe(2);
   });
 
+  test("should reset if a new dependency is added to the end of the array", () => {
+    const { result, rerender } = renderHook<
+      { value: number; deps: any[] },
+      [number, React.Dispatch<React.SetStateAction<number>>]
+    >(
+      ({ value, deps }) => {
+        const state = useStateWithDeps(value, deps);
+        return state;
+      },
+      { initialProps: { value: 1, deps: [5, 6, 7] } }
+    );
+    let [state] = result.current;
+    expect(state).toBe(1);
+    rerender({ value: 2, deps: [5, 6, 7, 8] });
+    [state] = result.current;
+    expect(state).toBe(2);
+  });
+
   test("should call initial state function with undefined on first run", () => {
     let lastStateValue;
     const { result, rerender } = renderHook<
