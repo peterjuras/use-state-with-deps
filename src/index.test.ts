@@ -11,7 +11,7 @@ describe("#use-state-with-deps", () => {
         const state = useStateWithDeps(value, []);
         return state;
       },
-      { initialProps: { value: 1 } }
+      { initialProps: { value: 1 } },
     );
     let [state, setState] = result.current;
     expect(state).toBe(1);
@@ -32,7 +32,7 @@ describe("#use-state-with-deps", () => {
         const state = useStateWithDeps(value, deps);
         return state;
       },
-      { initialProps: { value: 1, deps: [5] } }
+      { initialProps: { value: 1, deps: [5] } },
     );
     let [state] = result.current;
     expect(state).toBe(1);
@@ -50,7 +50,7 @@ describe("#use-state-with-deps", () => {
         const state = useStateWithDeps(value, deps);
         return state;
       },
-      { initialProps: { value: 1, deps: [5] } }
+      { initialProps: { value: 1, deps: [5] } },
     );
     let [state] = result.current;
     expect(state).toBe(1);
@@ -68,7 +68,7 @@ describe("#use-state-with-deps", () => {
         const state = useStateWithDeps(value, deps);
         return state;
       },
-      { initialProps: { value: 1, deps: [5, 6, 7] } }
+      { initialProps: { value: 1, deps: [5, 6, 7] } },
     );
     let [state] = result.current;
     expect(state).toBe(1);
@@ -86,7 +86,7 @@ describe("#use-state-with-deps", () => {
         const state = useStateWithDeps(value, deps);
         return state;
       },
-      { initialProps: { value: 1, deps: [5, 6, 7] } }
+      { initialProps: { value: 1, deps: [5, 6, 7] } },
     );
     let [state] = result.current;
     expect(state).toBe(1);
@@ -113,7 +113,7 @@ describe("#use-state-with-deps", () => {
           },
           deps: [5],
         },
-      }
+      },
     );
     let [state] = result.current;
     expect(state).toBe(1);
@@ -141,7 +141,7 @@ describe("#use-state-with-deps", () => {
           },
           deps: [5],
         },
-      }
+      },
     );
     let [state] = result.current;
     expect(state).toBe(1);
@@ -171,7 +171,7 @@ describe("#use-state-with-deps", () => {
           value: () => 1,
           deps: [5],
         },
-      }
+      },
     );
     let [state, setState] = result.current;
     let previousValueFromSetState;
@@ -206,7 +206,7 @@ describe("#use-state-with-deps", () => {
           value: getInitialState,
           deps: [5],
         },
-      }
+      },
     );
     let [state] = result.current;
     expect(state).toBe(1);
@@ -236,7 +236,7 @@ describe("#use-state-with-deps", () => {
           value: () => 1,
           deps: [5],
         },
-      }
+      },
     );
 
     let [state, setState] = result.current;
@@ -272,7 +272,7 @@ describe("#use-state-with-deps", () => {
           value: () => 1,
           deps: [5],
         },
-      }
+      },
     );
 
     let [state, setState] = result.current;

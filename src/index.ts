@@ -19,7 +19,7 @@ import { isFunction } from "./is-function";
  */
 export function useStateWithDeps<S>(
   initialState: S | ((previousState?: S) => S),
-  deps: React.DependencyList
+  deps: React.DependencyList,
 ): [S, React.Dispatch<SetStateAction<S>>] {
   const isMounted = useRef(false);
 
@@ -59,7 +59,7 @@ export function useStateWithDeps<S>(
   const forceUpdate = useForceUpdate();
 
   const updateState = useCallback(function updateState(
-    newState: S | ((previousState: S) => S)
+    newState: S | ((previousState: S) => S),
   ): void {
     let nextState: S;
     if (isFunction(newState)) {
@@ -71,8 +71,7 @@ export function useStateWithDeps<S>(
       state.current = nextState;
       forceUpdate();
     }
-  },
-  []);
+  }, []);
 
   return [state.current, updateState];
 }
