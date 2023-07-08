@@ -1,6 +1,6 @@
 export function depsAreEqual(
   prevDeps: React.DependencyList,
-  deps: React.DependencyList
+  deps: React.DependencyList,
 ): boolean {
   return (
     prevDeps.length === deps.length &&
