@@ -47,9 +47,9 @@
     "npm-run-all2": "7.0.2",
     "prettier": "3.5.3",
     "prettier-check": "2.0.0",
-    "react": "19.0.0",
-    "react-dom": "19.0.0",
-    "react-test-renderer": "19.0.0",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "react-test-renderer": "19.1.0",
     "typescript": "5.8.2"
   },
   "peerDependencies": {
