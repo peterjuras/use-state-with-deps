@@ -34,9 +34,9 @@
     "@testing-library/react-hooks": "8.0.1",
     "@types/jest": "29.5.14",
     "@types/lolex": "5.1.6",
-    "@types/react": "19.1.14",
-    "@typescript-eslint/eslint-plugin": "8.44.1",
-    "@typescript-eslint/parser": "8.44.1",
+    "@types/react": "19.2.0",
+    "@typescript-eslint/eslint-plugin": "8.45.0",
+    "@typescript-eslint/parser": "8.45.0",
     "babel-jest": "29.7.0",
     "eslint": "9.36.0",
     "eslint-config-prettier": "10.1.8",
@@ -47,10 +47,10 @@
     "npm-run-all2": "8.0.4",
     "prettier": "3.6.2",
     "prettier-check": "2.0.0",
-    "react": "19.1.1",
-    "react-dom": "19.1.1",
-    "react-test-renderer": "19.1.1",
-    "typescript": "5.9.2"
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "react-test-renderer": "19.2.0",
+    "typescript": "5.9.3"
   },
   "peerDependencies": {
     "react": "> 16.8.0"
