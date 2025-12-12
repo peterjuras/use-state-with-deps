@@ -35,8 +35,8 @@
     "@types/jest": "30.0.0",
     "@types/lolex": "5.1.6",
     "@types/react": "19.2.7",
-    "@typescript-eslint/eslint-plugin": "8.48.1",
-    "@typescript-eslint/parser": "8.48.1",
+    "@typescript-eslint/eslint-plugin": "8.49.0",
+    "@typescript-eslint/parser": "8.49.0",
     "babel-jest": "30.2.0",
     "eslint": "9.39.1",
     "eslint-config-prettier": "10.1.8",
@@ -47,9 +47,9 @@
     "npm-run-all2": "8.0.4",
     "prettier": "3.7.4",
     "prettier-check": "2.0.0",
-    "react": "19.2.1",
-    "react-dom": "19.2.1",
-    "react-test-renderer": "19.2.1",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-test-renderer": "19.2.3",
     "typescript": "5.9.3"
   },
   "peerDependencies": {
