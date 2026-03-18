@@ -1,5 +1,4 @@
-import { useRef, SetStateAction, useCallback } from "react";
-import { useForceUpdate } from "./use-force-update";
+import { useState, SetStateAction, useCallback } from "react";
 import { depsAreEqual } from "./deps-are-equal";
 import { isFunction } from "./is-function";
 
@@ -21,57 +20,42 @@ export function useStateWithDeps<S>(
   initialState: S | ((previousState?: S) => S),
   deps: React.DependencyList,
 ): [S, React.Dispatch<SetStateAction<S>>] {
-  const isMounted = useRef(false);
+  const [stateAndDeps, setStateAndDeps] = useState<{
+    state: S;
+    deps: React.DependencyList;
+  }>(() => {
+    const state = isFunction(initialState)
+      ? initialState(undefined)
+      : initialState;
+    return { state, deps };
+  });
 
-  // Determine initial state
-  let usableInitialState: S | null = null;
-  if (!isMounted.current) {
-    isMounted.current = true;
-    if (isFunction(initialState)) {
-      usableInitialState = initialState();
-    } else {
-      usableInitialState = initialState;
-    }
+  // Use the prevState pattern to detect dependency changes during rendering.
+  // Calling setState during render (without refs) is the React-approved approach
+  // for adjusting state based on changing inputs, and correctly supports
+  // concurrent features like useTransition and useDeferredValue.
+  let currentState = stateAndDeps.state;
+  if (!depsAreEqual(stateAndDeps.deps, deps)) {
+    const nextState = isFunction(initialState)
+      ? initialState(stateAndDeps.state)
+      : (initialState as S);
+    currentState = nextState;
+    setStateAndDeps({ state: nextState, deps });
   }
-
-  // It would be possible to use useState instead of
-  // useRef to store the state, however this would
-  // trigger re-renders whenever the state is reset due
-  // to a change in dependencies. In order to avoid these
-  // re-renders, the state is stored in a ref and an
-  // update is triggered via forceUpdate below when necessary
-  const state = useRef(usableInitialState as S);
-
-  // Check if dependencies have changed
-  const prevDeps = useRef(deps);
-  if (!depsAreEqual(prevDeps.current, deps)) {
-    // Update state and deps
-    let nextState: S;
-    if (isFunction(initialState)) {
-      nextState = initialState(state.current);
-    } else {
-      nextState = initialState;
-    }
-    state.current = nextState;
-    prevDeps.current = deps;
-  }
-
-  const forceUpdate = useForceUpdate();
 
   const updateState = useCallback(function updateState(
     newState: S | ((previousState: S) => S),
   ): void {
-    let nextState: S;
-    if (isFunction(newState)) {
-      nextState = newState(state.current);
-    } else {
-      nextState = newState;
-    }
-    if (!Object.is(state.current, nextState)) {
-      state.current = nextState;
-      forceUpdate();
-    }
+    setStateAndDeps((prev) => {
+      const nextState = isFunction(newState)
+        ? newState(prev.state)
+        : (newState as S);
+      if (Object.is(prev.state, nextState)) {
+        return prev;
+      }
+      return { state: nextState, deps: prev.deps };
+    });
   }, []);
 
-  return [state.current, updateState];
+  return [currentState, updateState];
 }
