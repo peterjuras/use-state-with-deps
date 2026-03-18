@@ -47,6 +47,9 @@ jobs:
     needs: build
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # required for creating GitHub releases
+      id-token: write # required for OIDC-based npm publishing (no NPM_TOKEN needed)
     steps:
       - uses: actions/checkout@v5
       - name: Download build
@@ -55,10 +58,9 @@ jobs:
           name: build
           path: build
       - name: Release
-        run: npx semantic-release@19 --branches main
+        run: npx semantic-release@25 --branches main
         working-directory: build
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   notify-on-failure:
     needs:
