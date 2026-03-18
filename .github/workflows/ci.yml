@@ -57,6 +57,10 @@ jobs:
         with:
           name: build
           path: build
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
       - name: Release
         run: npx semantic-release@25 --branches main
         working-directory: build
